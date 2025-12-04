@@ -13,7 +13,7 @@ const formatStatus = (status?: string) => status ?? 'unknown';
 
 <template>
   <div class="products-view">
-    <h1>Devices</h1>
+    <h1>Devices - (TESTING TESTING TESTING)</h1>
 
     <div v-if="loading" class="loading">Loading devices…</div>
 
