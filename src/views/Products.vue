@@ -1,37 +1,45 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useProducts } from '@/composables/useProducts';
+import { useDevices } from '@/composables/useDevices';
 
-const { products, loading, error, fetchProducts } = useProducts();
+const { devices, loading, error, fetchDevices } = useDevices();
 
 onMounted(() => {
-  fetchProducts();
+  fetchDevices();
 });
 
-const formatPrice = (p?: number) =>
-  p === undefined ? '—' : `£${(p / 100).toFixed(2)}`;
+const formatStatus = (status?: string) => status ?? 'unknown';
 </script>
 
 <template>
   <div class="products-view">
-    <h1>Products</h1>
+    <h1>Devices</h1>
 
-    <div v-if="loading" class="loading">Loading products…</div>
+    <div v-if="loading" class="loading">Loading devices…</div>
+
     <div v-else-if="error" class="error">
       <p>Error: {{ error }}</p>
-      <button @click="fetchProducts(true)">Retry</button>
-    </div>
-    <div v-else-if="products.length === 0" class="empty">
-      No products found.
+      <button @click="fetchDevices(true)">Retry</button>
     </div>
 
+    <div v-else-if="devices.length === 0" class="empty">No devices found.</div>
+
     <ul v-else class="list">
-      <li v-for="p in products" :key="p.id" class="card">
+      <li v-for="d in devices" :key="d.id" class="card">
         <div class="row">
-          <strong class="name">{{ p.name }}</strong>
-          <span class="price">{{ formatPrice(p.pricePence) }}</span>
+          <strong class="name">
+            {{ d.label ?? d.id }}
+          </strong>
+          <span class="price">
+            {{ formatStatus(d.status) }}
+          </span>
         </div>
-        <p v-if="p.description" class="desc">{{ p.description }}</p>
+
+        <p class="desc">
+          <span v-if="d.deviceType">Type: {{ d.deviceType }}</span>
+          <span v-if="d.serialNumber"> • Serial: {{ d.serialNumber }} </span>
+          <span v-if="d.loanedTo"> • On loan to: {{ d.loanedTo }} </span>
+        </p>
       </li>
     </ul>
   </div>
@@ -67,6 +75,7 @@ const formatPrice = (p?: number) =>
 .price {
   color: #065f46;
   font-weight: 600;
+  text-transform: capitalize;
 }
 .desc {
   color: #6b7280;

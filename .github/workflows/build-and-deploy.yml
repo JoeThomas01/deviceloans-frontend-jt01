@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      VITE_API_BASE_URL: https://deviceloans-test-jt01b-func.azurewebsites.net/api
+      VITE_API_BASE_URL: https://deviceloans-test-jt01b-func.azurewebsites.net/api/
 
     steps:
       - name: Checkout
